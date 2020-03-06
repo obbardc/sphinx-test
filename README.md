@@ -77,33 +77,37 @@ The following example will create a arm64 image, install several
 packages in it, change the file /etc/hostname to "debian" and finally
 make a tarball.
 
-    {{- $image := or .image "debian.tgz" -}}
+```yaml
+{{- $image := or .image "debian.tgz" -}}
 
-    architecture: arm64
+architecture: arm64
 
-    actions:
-      - action: debootstrap
-        suite: "buster"
-        components:
-          - main
-          - non-free
-        mirror: https://deb.debian.org/debian
-        variant: minbase
+actions:
+ - action: debootstrap
+   suite: "buster"
+   components:
+     - main
+     - non-free
+   mirror: https://deb.debian.org/debian
+   variant: minbase
 
-      - action: apt
-        packages: [ sudo, openssh-server, adduser, systemd-sysv, firmware-linux ]
+ - action: apt
+   packages: [ sudo, openssh-server, adduser, systemd-sysv, firmware-linux ]
 
-      - action: run
-        chroot: true
-        command: echo debian > /etc/hostname
+ - action: run
+   chroot: true
+   command: echo debian > /etc/hostname
 
-      - action: pack
-        file: {{ $image }}
-        compression: gz
+ - action: pack
+   file: {{ $image }}
+   compression: gz
+```
 
 To run it, create a file named `example.yaml` and run:
 
-    debos example.yaml
+```
+$ debos example.yaml
+```
 
 The final tarball will be named "debian.tgz" if you would like to modify
 this name, you can provided a different name for the variable image like
